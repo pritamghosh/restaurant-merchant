@@ -2,7 +2,7 @@ package com.mindtree.restaurant.service.impl;
 
 import org.springframework.stereotype.Service;
 
-import com.mindtree.restaurant.model.Order;
+import com.mindtree.restaurant.model.OrderItem;
 import com.mindtree.restaurant.model.Restaurant;
 import com.mindtree.restaurant.model.User;
 import com.mindtree.restaurant.service.RestaurantService;
@@ -23,7 +23,7 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
-    public void addOrder(Order order) throws Exception {
+    public void addOrder(OrderItem order) throws Exception {
     }
 
 }

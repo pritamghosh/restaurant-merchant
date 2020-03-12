@@ -1,10 +1,14 @@
 package com.mindtree.restaurant.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import lombok.Data;
 
 @Data
 public class Order {
-    private int qty;
-    private Menu menuItem;
+    private String email;
+    private String  faceId;
+    private List<Order> orders = new ArrayList<Order>();
     
 }
