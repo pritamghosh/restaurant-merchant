@@ -9,6 +9,6 @@ import lombok.Data;
 public class Order {
     private String email;
     private String  faceId;
-    private List<Order> orders = new ArrayList<Order>();
+    private List<OrderItem> orders = new ArrayList<OrderItem>();
     
 }
