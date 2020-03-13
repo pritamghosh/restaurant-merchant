@@ -8,12 +8,11 @@
 		<version>2.2.5.RELEASE</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>aero.sita</groupId>
+	<groupId>com.mindtree</groupId>
 	<artifactId>restauranet-app</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
-	<name>restauranet-app</name>
-	<description>POC project for user and permission </description>
+	<name>restaurant-merchant-api</name>
 
 	<properties>
 		<java.version>1.8</java.version>
@@ -72,6 +71,7 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 		</plugins>
+		<finalName>restaurant-merchant-api</finalName>
 	</build>
 
 </project>

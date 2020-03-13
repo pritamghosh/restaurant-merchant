@@ -1,0 +1,493 @@
+{
+   "restaurents":[
+      {
+         "name":"Andy's",
+         "menuGruop":[
+            {
+               "category":"Starters",
+               "menuList":[
+                  {
+                     "price":5.0,
+                     "name":"Goli wings",
+                     "description":"Spicy chicken wings",
+                     "veg":false
+                  },
+                  {
+                     "price":6.0,
+                     "name":"Keema matar samosa",
+                     "description":"Spicied lamb stuffed samosha",
+                     "veg":false
+                  },
+                  {
+                     "price":4.0,
+                     "name":"Fish finger",
+                     "description":"Battered fish fry",
+                     "veg":false
+                  },
+                  {
+                     "price":5.0,
+                     "name":"Paneer Tikka",
+                     "description":"Grilled panner slices",
+                     "veg":true
+                  },
+                  {
+                     "price":5.0,
+                     "name":"Tandori prawn",
+                     "description":"Roasted spicy prawn",
+                     "veg":false
+                  }
+               ]
+            },
+            {
+               "category":"Curries",
+               "menuList":[
+                  {
+                     "price":5.0,
+                     "name":"Chicken tikka masala",
+                     "description":"Spicy chiken wings",
+                     "veg":false
+                  },
+                  {
+                     "price":6.0,
+                     "name":"Goan fish curry",
+                     "description":"Spicied lamb stuffed samosha",
+                     "veg":false
+                  },
+                  {
+                     "price":4.0,
+                     "name":"panner kofta",
+                     "description":"Battered fish fry",
+                     "veg":true
+                  },
+                  {
+                     "price":5.0,
+                     "name":"Punjabi chicken curry",
+                     "description":"Grilled panner slices",
+                     "veg":false
+                  },
+                  {
+                     "price":5.0,
+                     "name":"Daal makhani",
+                     "description":"Roasted spicy prawn",
+                     "veg":true
+                  },
+                  {
+                     "price":5.0,
+                     "name":"channa masala",
+                     "description":"Roasted spicy prawn",
+                     "veg":true
+                  }
+               ]
+            },
+            {
+               "category":"Rice and Breads",
+               "menuList":[
+                  {
+                     "price":1.0,
+                     "name":"Naan",
+                     "description":"Spicy chiken wings",
+                     "veg":true
+                  },
+                  {
+                     "price":1.0,
+                     "name":"garlic Naan",
+                     "description":"Spicied lamb stuffed samosha",
+                     "veg":true
+                  },
+                  {
+                     "price":1.0,
+                     "name":"Tandoori Roti",
+                     "description":"Battered fish fry",
+                     "veg":true
+                  },
+                  {
+                     "price":1.0,
+                     "name":"Basmati Rice",
+                     "description":"Grilled panner slices",
+                     "veg":true
+                  },
+                  {
+                     "price":2.0,
+                     "name":"Zafarani Pulao",
+                     "description":"Roasted spicy prawn",
+                     "veg":true
+                  },
+                  {
+                     "price":5.0,
+                     "name":"Hydrabadi Chicken biryani",
+                     "description":"Roasted spicy prawn",
+                     "veg":false
+                  },
+                  {
+                     "price":6.0,
+                     "name":"Lamb biryani",
+                     "description":"Roasted spicy prawn",
+                     "veg":false
+                  },
+                  {
+                     "price":7.0,
+                     "name":"King Prawn biryani",
+                     "description":"Roasted spicy prawn",
+                     "veg":false
+                  }
+               ]
+            },
+            {
+               "category":"Desserts",
+               "menuList":[
+                  {
+                     "price":2.0,
+                     "name":"Gulan jamun with ice cream",
+                     "description":"Spicy chiken wings",
+                     "veg":true
+                  },
+                  {
+                     "price":3.0,
+                     "name":"Gajar ka halawa",
+                     "description":"Spicied lamb stuffed samosha",
+                     "veg":true
+                  },
+                  {
+                     "price":1.0,
+                     "name":"kulfi",
+                     "description":"Battered fish fry",
+                     "veg":true
+                  },
+                  {
+                     "price":5.0,
+                     "name":"Ice cream",
+                     "description":"Grilled panner slices",
+                     "veg":true
+                  }
+               ]
+            }
+         ]
+      },
+      {
+         "name":"Namaste Kitchen",
+         "menuGruop":[
+            {
+               "category":"Starters",
+               "menuList":[
+                  {
+                     "price":5.0,
+                     "name":"Goli wings",
+                     "description":"Spicy chicken wings",
+                     "veg":false
+                  },
+                  {
+                     "price":6.0,
+                     "name":"Keema matar samosa",
+                     "description":"Spicied lamb stuffed samosha",
+                     "veg":false
+                  },
+                  {
+                     "price":4.0,
+                     "name":"Fish finger",
+                     "description":"Battered fish fry",
+                     "veg":false
+                  },
+                  {
+                     "price":5.0,
+                     "name":"Paneer Tikka",
+                     "description":"Grilled panner slices",
+                     "veg":true
+                  },
+                  {
+                     "price":5.0,
+                     "name":"Tandori prawn",
+                     "description":"Roasted spicy prawn",
+                     "veg":false
+                  }
+               ]
+            },
+            {
+               "category":"Curries",
+               "menuList":[
+                  {
+                     "price":5.0,
+                     "name":"Chicken tikka masala",
+                     "description":"Spicy chiken wings",
+                     "veg":false
+                  },
+                  {
+                     "price":6.0,
+                     "name":"Goan fish curry",
+                     "description":"Spicied lamb stuffed samosha",
+                     "veg":false
+                  },
+                  {
+                     "price":4.0,
+                     "name":"panner kofta",
+                     "description":"Battered fish fry",
+                     "veg":true
+                  },
+                  {
+                     "price":5.0,
+                     "name":"Punjabi chicken curry",
+                     "description":"Grilled panner slices",
+                     "veg":false
+                  },
+                  {
+                     "price":5.0,
+                     "name":"Daal makhani",
+                     "description":"Roasted spicy prawn",
+                     "veg":true
+                  },
+                  {
+                     "price":5.0,
+                     "name":"channa masala",
+                     "description":"Roasted spicy prawn",
+                     "veg":true
+                  }
+               ]
+            },
+            {
+               "category":"Rice and Breads",
+               "menuList":[
+                  {
+                     "price":1.0,
+                     "name":"Naan",
+                     "description":"Spicy chiken wings",
+                     "veg":true
+                  },
+                  {
+                     "price":1.0,
+                     "name":"garlic Naan",
+                     "description":"Spicied lamb stuffed samosha",
+                     "veg":true
+                  },
+                  {
+                     "price":1.0,
+                     "name":"Tandoori Roti",
+                     "description":"Battered fish fry",
+                     "veg":true
+                  },
+                  {
+                     "price":1.0,
+                     "name":"Basmati Rice",
+                     "description":"Grilled panner slices",
+                     "veg":true
+                  },
+                  {
+                     "price":2.0,
+                     "name":"Zafarani Pulao",
+                     "description":"Roasted spicy prawn",
+                     "veg":true
+                  },
+                  {
+                     "price":5.0,
+                     "name":"Hydrabadi Chicken biryani",
+                     "description":"Roasted spicy prawn",
+                     "veg":false
+                  },
+                  {
+                     "price":6.0,
+                     "name":"Lamb biryani",
+                     "description":"Roasted spicy prawn",
+                     "veg":false
+                  },
+                  {
+                     "price":7.0,
+                     "name":"King Prawn biryani",
+                     "description":"Roasted spicy prawn",
+                     "veg":false
+                  }
+               ]
+            },
+            {
+               "category":"Desserts",
+               "menuList":[
+                  {
+                     "price":2.0,
+                     "name":"Gulan jamun with ice cream",
+                     "description":"Spicy chiken wings",
+                     "veg":true
+                  },
+                  {
+                     "price":3.0,
+                     "name":"Gajar ka halawa",
+                     "description":"Spicied lamb stuffed samosha",
+                     "veg":true
+                  },
+                  {
+                     "price":1.0,
+                     "name":"kulfi",
+                     "description":"Battered fish fry",
+                     "veg":true
+                  },
+                  {
+                     "price":5.0,
+                     "name":"Ice cream",
+                     "description":"Grilled panner slices",
+                     "veg":true
+                  }
+               ]
+            }
+         ]
+      },
+      {
+         "name":"Indian Accent",
+         "menuGruop":[
+            {
+               "category":"Starters",
+               "menuList":[
+                  {
+                     "price":5.0,
+                     "name":"Goli wings",
+                     "description":"Spicy chicken wings",
+                     "veg":false
+                  },
+                  {
+                     "price":6.0,
+                     "name":"Keema matar samosa",
+                     "description":"Spicied lamb stuffed samosha",
+                     "veg":false
+                  },
+                  {
+                     "price":4.0,
+                     "name":"Fish finger",
+                     "description":"Battered fish fry",
+                     "veg":false
+                  },
+                  {
+                     "price":5.0,
+                     "name":"Paneer Tikka",
+                     "description":"Grilled panner slices",
+                     "veg":true
+                  },
+                  {
+                     "price":5.0,
+                     "name":"Tandori prawn",
+                     "description":"Roasted spicy prawn",
+                     "veg":false
+                  }
+               ]
+            },
+            {
+               "category":"Curries",
+               "menuList":[
+                  {
+                     "price":5.0,
+                     "name":"Chicken tikka masala",
+                     "description":"Spicy chiken wings",
+                     "veg":false
+                  },
+                  {
+                     "price":6.0,
+                     "name":"Goan fish curry",
+                     "description":"Spicied lamb stuffed samosha",
+                     "veg":false
+                  },
+                  {
+                     "price":4.0,
+                     "name":"panner kofta",
+                     "description":"Battered fish fry",
+                     "veg":true
+                  },
+                  {
+                     "price":5.0,
+                     "name":"Punjabi chicken curry",
+                     "description":"Grilled panner slices",
+                     "veg":false
+                  },
+                  {
+                     "price":5.0,
+                     "name":"Daal makhani",
+                     "description":"Roasted spicy prawn",
+                     "veg":true
+                  },
+                  {
+                     "price":5.0,
+                     "name":"channa masala",
+                     "description":"Roasted spicy prawn",
+                     "veg":true
+                  }
+               ]
+            },
+            {
+               "category":"Rice and Breads",
+               "menuList":[
+                  {
+                     "price":1.0,
+                     "name":"Naan",
+                     "description":"Spicy chiken wings",
+                     "veg":true
+                  },
+                  {
+                     "price":1.0,
+                     "name":"garlic Naan",
+                     "description":"Spicied lamb stuffed samosha",
+                     "veg":true
+                  },
+                  {
+                     "price":1.0,
+                     "name":"Tandoori Roti",
+                     "description":"Battered fish fry",
+                     "veg":true
+                  },
+                  {
+                     "price":1.0,
+                     "name":"Basmati Rice",
+                     "description":"Grilled panner slices",
+                     "veg":true
+                  },
+                  {
+                     "price":2.0,
+                     "name":"Zafarani Pulao",
+                     "description":"Roasted spicy prawn",
+                     "veg":true
+                  },
+                  {
+                     "price":5.0,
+                     "name":"Hydrabadi Chicken biryani",
+                     "description":"Roasted spicy prawn",
+                     "veg":false
+                  },
+                  {
+                     "price":6.0,
+                     "name":"Lamb biryani",
+                     "description":"Roasted spicy prawn",
+                     "veg":false
+                  },
+                  {
+                     "price":7.0,
+                     "name":"King Prawn biryani",
+                     "description":"Roasted spicy prawn",
+                     "veg":false
+                  }
+               ]
+            },
+            {
+               "category":"Desserts",
+               "menuList":[
+                  {
+                     "price":2.0,
+                     "name":"Gulan jamun with ice cream",
+                     "description":"Spicy chiken wings",
+                     "veg":true
+                  },
+                  {
+                     "price":3.0,
+                     "name":"Gajar ka halawa",
+                     "description":"Spicied lamb stuffed samosha",
+                     "veg":true
+                  },
+                  {
+                     "price":1.0,
+                     "name":"kulfi",
+                     "description":"Battered fish fry",
+                     "veg":true
+                  },
+                  {
+                     "price":5.0,
+                     "name":"Ice cream",
+                     "description":"Grilled panner slices",
+                     "veg":true
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}

@@ -5,13 +5,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mindtree.restaurant.model.OrderItem;
-import com.mindtree.restaurant.model.Restaurant;
 import com.mindtree.restaurant.model.User;
 import com.mindtree.restaurant.service.RestaurantService;
 
@@ -22,24 +20,30 @@ public class RestaurantController {
     @Autowired
     private RestaurantService service;
     @PostMapping("/order")
-    public String createMenu(@RequestBody OrderItem order) throws Exception {
+    public String placeOrder(@RequestBody OrderItem order) throws Exception {
         service.addOrder(order);
         return "Order placed Successfully!";
 
     }
     
-    @GetMapping("/")
-    public Restaurant getRestaurantMenu() {
-        return service.getRestaurantMenu();
+    public RestaurantService getService() {
+		return service;
+	}
 
-    }
-    @PostMapping("/login")
-    public User login(@RequestBody User user) throws Exception {
-       return  service.getUser(user);
+	public void setService(RestaurantService service) {
+		this.service = service;
+	}
 
-    }
+	 @PostMapping("/login")
+	public User login(@RequestBody User user) throws Exception {
+    	return service.login(user);
+    	
+
+	}
     
-    @ExceptionHandler(Exception.class)
+
+
+	@ExceptionHandler(Exception.class)
     public ResponseEntity<Object> handleError(Exception ex){
         return  new ResponseEntity<>( HttpStatus.BAD_REQUEST);
         
