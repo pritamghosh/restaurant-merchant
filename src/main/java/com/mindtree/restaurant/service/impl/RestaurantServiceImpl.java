@@ -111,9 +111,6 @@ public class RestaurantServiceImpl implements RestaurantService {
     @Override
     public User login(User user) throws Exception {
         User userRes = USER_MAP.get(user.getUsername().toLowerCase());
-        if (userRes == null) {
-            throw new Exception("Empty " + USER_MAP.size());
-        }
         if (userRes != null && userRes.getPassword().equals(user.getPassword())) {
             for (Restaurant restaurant : RESTAURANTS.getRestaurents()) {
                 if (restaurant.getName().equalsIgnoreCase(userRes.getRestaurantName()))
