@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,6 +20,10 @@ public class RestaurantController {
 
     @Autowired
     private RestaurantService service;
+    @GetMapping("/test")
+    public String test() {
+    	return "OK..Tested";
+    }
     @PostMapping("/order")
     public String placeOrder(@RequestBody OrderItem order) throws Exception {
         service.addOrder(order);
@@ -45,7 +50,7 @@ public class RestaurantController {
 
 	@ExceptionHandler(Exception.class)
     public ResponseEntity<Object> handleError(Exception ex){
-        return  new ResponseEntity<>( HttpStatus.BAD_REQUEST);
+        return  new ResponseEntity<>( ex, HttpStatus.BAD_REQUEST);
         
     }
 }

@@ -51,7 +51,7 @@ public class RestaurantServiceImpl implements RestaurantService {
 				user.setUsername(restaurant[1]);
 				user.setPassword(restaurant[2]);
 				user.setEmail(restaurant[3]);
-				userMap.put(restaurant[1], user);
+				userMap.put(restaurant[1].toLowerCase(), user);
 				line = br.readLine();
 			}
 
@@ -70,7 +70,7 @@ public class RestaurantServiceImpl implements RestaurantService {
 
 	@Override
 	public User login(User user) throws Exception {
-		User userRes = userMap.get(user.getUsername());
+		User userRes = userMap.get(user.getUsername().toLowerCase());
 		if(userRes!=null && userRes.getPassword().equals(user.getPassword())) {
 			for(Restaurant restaurant : restaurents.getRestaurents()) {
 				if(restaurant.getName().equalsIgnoreCase(userRes.getRestaurantName()))
