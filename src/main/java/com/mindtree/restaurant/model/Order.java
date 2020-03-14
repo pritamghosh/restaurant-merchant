@@ -7,8 +7,10 @@ import lombok.Data;
 
 @Data
 public class Order {
+    private String restaurantUsername;
     private String email;
     private String  faceId;
     private List<OrderItem> orderItems = new ArrayList<OrderItem>();
+    private String restaurantName;
     
 }
