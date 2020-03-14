@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -24,6 +25,7 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import javax.mail.util.ByteArrayDataSource;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -49,8 +51,14 @@ import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
 import net.sf.jasperreports.export.SimplePdfExporterConfiguration;
 import net.sf.jasperreports.export.SimplePdfReportConfiguration;
 
+
 @Service
 public class RestaurantServiceImpl implements RestaurantService {
+    
+    @Value("${app.smtp.username}")
+    private String username;
+    @Value("${app.smtp.password}")
+    private String password;
     private static final Map<String, User> USER_MAP = new HashMap<String, User>();
     private static Restaurants RESTAURANTS = new Restaurants();
     {
@@ -102,6 +110,9 @@ public class RestaurantServiceImpl implements RestaurantService {
     @Override
     public void placeOrder(Order order) throws Exception {
         order.setRestaurantName(USER_MAP.get(order.getRestaurantUsername().toLowerCase()).getRestaurantName());
+        order.setDate(new Date());
+        //call payment
+        order.setTxnId("txnid");
         sendMail(order);
     }
 
@@ -124,16 +135,14 @@ public class RestaurantServiceImpl implements RestaurantService {
     private void sendMail(Order order){
         
         byte[] invoicePdf = createInvoice(order);
-        String to = "";
+        String to = order.getEmail();
 
         // Sender's email ID needs to be mentioned
-        String from = "fromemail@gmail.com";
+        String from = USER_MAP.get(order.getRestaurantUsername().toLowerCase()).getEmail();// "fromemail@gmail.com";
 
-        final String username = "manishaspatil";//change accordingly
-        final String password = "******";//change accordingly
 
         // Assuming you are sending email through relay.jangosmtp.net
-        String host = "relay.jangosmtp.net";
+        String host = "smtp.gmail.com";
 
         Properties props = new Properties();
         props.put("mail.smtp.auth", "true");
@@ -189,7 +198,6 @@ public class RestaurantServiceImpl implements RestaurantService {
            // Send message
            Transport.send(message);
 
-           System.out.println("Sent message successfully....");
     
         } catch (MessagingException e) {
            throw new RuntimeException(e);

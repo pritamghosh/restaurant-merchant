@@ -1,3 +1,7 @@
 server:
    port: 9020
    
+app:
+   smtp:
+      username: smtp.pritam@gmail.com
+      password: Pass@M1034079
