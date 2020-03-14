@@ -5,3 +5,5 @@ app:
    smtp:
       username: smtp.pritam@gmail.com
       password: Pass@M1034079
+      port: "587"
+      host: "smtp.gmail.com"

@@ -23,15 +23,11 @@ public class RestaurantController {
     @Autowired
     private RestaurantService service;
     
-    @GetMapping("/")
-    public String test() {
-        return "OK:";
-    }
     
     @PostMapping("/order")
     public String placeOrder(@RequestBody Order order) throws Exception {
         service.placeOrder(order);
-        return "Order placed Successfully!";
+        return "Order placed Successfully! Please check you email for receipt!";
 
     }
     
@@ -48,6 +44,7 @@ public class RestaurantController {
 
 	@ExceptionHandler(Exception.class)
     public ResponseEntity<Object> handleError(Exception ex){
+	    ex.printStackTrace();
         return  new ResponseEntity<>( ex, HttpStatus.BAD_REQUEST);
         
     }

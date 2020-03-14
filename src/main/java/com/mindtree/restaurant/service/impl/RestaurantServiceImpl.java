@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -29,8 +30,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mindtree.restaurant.model.Order;
 import com.mindtree.restaurant.model.Restaurant;
@@ -39,18 +38,11 @@ import com.mindtree.restaurant.model.User;
 import com.mindtree.restaurant.service.RestaurantService;
 
 import net.sf.jasperreports.engine.JREmptyDataSource;
-import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import net.sf.jasperreports.engine.export.JRPdfExporter;
 import net.sf.jasperreports.engine.util.JRLoader;
-import net.sf.jasperreports.export.SimpleExporterInput;
-import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
-import net.sf.jasperreports.export.SimplePdfExporterConfiguration;
-import net.sf.jasperreports.export.SimplePdfReportConfiguration;
 
 
 @Service
@@ -60,6 +52,10 @@ public class RestaurantServiceImpl implements RestaurantService {
     private String username;
     @Value("${app.smtp.password}")
     private String password;
+    @Value("${app.smtp.port}")
+    private String port;
+    @Value("${app.smtp.host}")
+    private String host;
     private static final Map<String, User> USER_MAP = new HashMap<String, User>();
     private static Restaurants RESTAURANTS = new Restaurants();
     {
@@ -68,16 +64,7 @@ public class RestaurantServiceImpl implements RestaurantService {
             RESTAURANTS = mapper.readValue(
                 new File(getClass().getClassLoader().getResource("Restaurent_menu.txt").getFile()), Restaurants.class);
         }
-        catch (JsonMappingException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        catch (JsonProcessingException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
         catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
@@ -111,10 +98,15 @@ public class RestaurantServiceImpl implements RestaurantService {
     @Override
     public void placeOrder(Order order) throws Exception {
         order.setRestaurantName(USER_MAP.get(order.getRestaurantUsername().toLowerCase()).getRestaurantName());
-        order.setDate(new Date());
+        Date date = new Date();
+        SimpleDateFormat sf = new SimpleDateFormat("EEE, d MMM yyyy");
+        order.setDate(sf.format(date));
+        order.setPaymentMode("Minto Pay");
+        order.setTotal(order.getOrderItems().stream().map(it->it.getQty()*it.getMenuItem().getPrice()).reduce( 0F,Float::sum));
         //call payment
-        order.setTxnId("txnid");
-        sendMail(order);
+        order.setTxnId("Transaction Id");
+        Thread th = new Thread(()->sendMail(order));
+        th.start();
     }
 
     @Override
@@ -138,18 +130,15 @@ public class RestaurantServiceImpl implements RestaurantService {
         byte[] invoicePdf = createInvoice(order);
         String to = order.getEmail();
 
-        // Sender's email ID needs to be mentioned
-        String from = USER_MAP.get(order.getRestaurantUsername().toLowerCase()).getEmail();// "fromemail@gmail.com";
 
 
-        // Assuming you are sending email through relay.jangosmtp.net
-        String host = "smtp.gmail.com";
 
         Properties props = new Properties();
+
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.starttls.enable", "true");
         props.put("mail.smtp.host", host);
-        props.put("mail.smtp.port", "25");
+        props.put("mail.smtp.port", port);
         
         
         // Get the Session object.
@@ -161,42 +150,28 @@ public class RestaurantServiceImpl implements RestaurantService {
            });
 
         try {
-           // Create a default MimeMessage object.
            Message message = new MimeMessage(session);
-
-           // Set From: header field of the header.
-           message.setFrom(new InternetAddress(from));
-
-           // Set To: header field of the header.
            message.setRecipients(Message.RecipientType.TO,
               InternetAddress.parse(to));
 
-           // Set Subject: header field
            message.setSubject("Invoice From "+order.getRestaurantName());
 
-           // Create the message part
            BodyPart messageBodyPart = new MimeBodyPart();
 
-           // Now set the actual message
-           messageBodyPart.setText("This is message body");
+           messageBodyPart.setText("Please Find the attached Invoice");
 
-           // Create a multipar message
            Multipart multipart = new MimeMultipart();
 
-           // Set text message part
            multipart.addBodyPart(messageBodyPart);
 
-           // Part two is attachment
            messageBodyPart = new MimeBodyPart();
-           DataSource source  = new ByteArrayDataSource(invoicePdf, "pdf"); 
+           DataSource source  = new ByteArrayDataSource(invoicePdf, "application/pdf"); 
            messageBodyPart.setDataHandler(new DataHandler(source));
            messageBodyPart.setFileName("Invoice.pdf");
            multipart.addBodyPart(messageBodyPart);
 
-           // Send the complete message parts
            message.setContent(multipart);
 
-           // Send message
            Transport.send(message);
 
     
@@ -209,47 +184,18 @@ public class RestaurantServiceImpl implements RestaurantService {
         try {
 
           Map<String, Object> parameters = new HashMap<>();
-//          JRBeanCollectionDataSource details = new JRBeanCollectionDataSource(order.getOrderItems());
-//          parameters.put("orderItems", details);
           parameters.put("order", order);
-          
           JasperReport report = (JasperReport) JRLoader.loadObject(this.getClass().getResourceAsStream("/invoice.jasper"));
           JasperPrint jasperPrint
           = JasperFillManager.fillReport(report, parameters,new JREmptyDataSource());
           byte[] pdfReport=
           JasperExportManager.exportReportToPdf(jasperPrint);
-          
-
           return pdfReport;
-
-
         } catch (Exception e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         return null;
     }
 
-    private void exportToPdf(String fileName, JasperPrint jasperPrint) throws JRException {
-
-        // print report to file
-        JRPdfExporter exporter = new JRPdfExporter();
-
-        exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
-        exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(fileName));
-
-        SimplePdfReportConfiguration reportConfig = new SimplePdfReportConfiguration();
-        reportConfig.setSizePageToContent(true);
-        reportConfig.setForceLineBreakPolicy(false);
-
-        SimplePdfExporterConfiguration exportConfig = new SimplePdfExporterConfiguration();
-        exportConfig.setMetadataAuthor("Test Author");
-        exportConfig.setEncrypted(false);
-        exportConfig.setAllowedPermissionsHint("PRINTING");
-
-        exporter.setConfiguration(reportConfig);
-        exporter.setConfiguration(exportConfig);
-        exporter.exportReport();
-    }
 
 }
