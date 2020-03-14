@@ -5,6 +5,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -44,10 +47,9 @@ import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.util.JRLoader;
 
-
 @Service
 public class RestaurantServiceImpl implements RestaurantService {
-    
+
     @Value("${app.smtp.username}")
     private String username;
     @Value("${app.smtp.password}")
@@ -60,17 +62,17 @@ public class RestaurantServiceImpl implements RestaurantService {
     private static Restaurants RESTAURANTS = new Restaurants();
     {
         ObjectMapper mapper = new ObjectMapper();
-        try {
-            RESTAURANTS = mapper.readValue(
-                new File(getClass().getClassLoader().getResource("Restaurent_menu.txt").getFile()), Restaurants.class);
+        try (Reader reader = new InputStreamReader(
+            getClass().getClassLoader().getResourceAsStream("Restaurent_menu.txt"))) {
+            RESTAURANTS = mapper.readValue(reader, Restaurants.class);
         }
         catch (IOException e) {
             e.printStackTrace();
         }
     }
     {
-        try (BufferedReader br = new BufferedReader(
-            new FileReader(getClass().getClassLoader().getResource("Restaurent_merchant_details.csv").getFile()))) {
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(
+            getClass().getClassLoader().getResourceAsStream("Restaurent_merchant_details.csv")))) {
             br.readLine();
             String line = br.readLine();
             while (!StringUtils.isEmpty(line)) {
@@ -83,12 +85,8 @@ public class RestaurantServiceImpl implements RestaurantService {
                 USER_MAP.put(restaurant[1].toLowerCase(), user);
                 line = br.readLine();
             }
+        }
 
-        }
-        catch (FileNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
         catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -102,18 +100,19 @@ public class RestaurantServiceImpl implements RestaurantService {
         SimpleDateFormat sf = new SimpleDateFormat("EEE, d MMM yyyy");
         order.setDate(sf.format(date));
         order.setPaymentMode("Minto Pay");
-        order.setTotal(order.getOrderItems().stream().map(it->it.getQty()*it.getMenuItem().getPrice()).reduce( 0F,Float::sum));
-        //call payment
+        order.setTotal(
+            order.getOrderItems().stream().map(it -> it.getQty() * it.getMenuItem().getPrice()).reduce(0F, Float::sum));
+        // call payment
         order.setTxnId("Transaction Id");
-        Thread th = new Thread(()->sendMail(order));
+        Thread th = new Thread(() -> sendMail(order));
         th.start();
     }
 
     @Override
     public User login(User user) throws Exception {
         User userRes = USER_MAP.get(user.getUsername().toLowerCase());
-        if(userRes == null ) {
-            throw new Exception("Empty "+USER_MAP.size());
+        if (userRes == null) {
+            throw new Exception("Empty " + USER_MAP.size());
         }
         if (userRes != null && userRes.getPassword().equals(user.getPassword())) {
             for (Restaurant restaurant : RESTAURANTS.getRestaurents()) {
@@ -124,14 +123,11 @@ public class RestaurantServiceImpl implements RestaurantService {
         }
         throw new Exception("Bad Credential");
     }
-    
-    private void sendMail(Order order){
-        
+
+    private void sendMail(Order order) {
+
         byte[] invoicePdf = createInvoice(order);
         String to = order.getEmail();
-
-
-
 
         Properties props = new Properties();
 
@@ -139,63 +135,59 @@ public class RestaurantServiceImpl implements RestaurantService {
         props.put("mail.smtp.starttls.enable", "true");
         props.put("mail.smtp.host", host);
         props.put("mail.smtp.port", port);
-        
-        
+
         // Get the Session object.
-        Session session = Session.getInstance(props,
-           new javax.mail.Authenticator() {
-              protected PasswordAuthentication getPasswordAuthentication() {
-                 return new PasswordAuthentication(username, password);
-              }
-           });
+        Session session = Session.getInstance(props, new javax.mail.Authenticator() {
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(username, password);
+            }
+        });
 
         try {
-           Message message = new MimeMessage(session);
-           message.setRecipients(Message.RecipientType.TO,
-              InternetAddress.parse(to));
+            Message message = new MimeMessage(session);
+            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
 
-           message.setSubject("Invoice From "+order.getRestaurantName());
+            message.setSubject("Invoice From " + order.getRestaurantName());
 
-           BodyPart messageBodyPart = new MimeBodyPart();
+            BodyPart messageBodyPart = new MimeBodyPart();
 
-           messageBodyPart.setText("Please Find the attached Invoice");
+            messageBodyPart.setText("Please Find the attached Invoice");
 
-           Multipart multipart = new MimeMultipart();
+            Multipart multipart = new MimeMultipart();
 
-           multipart.addBodyPart(messageBodyPart);
+            multipart.addBodyPart(messageBodyPart);
 
-           messageBodyPart = new MimeBodyPart();
-           DataSource source  = new ByteArrayDataSource(invoicePdf, "application/pdf"); 
-           messageBodyPart.setDataHandler(new DataHandler(source));
-           messageBodyPart.setFileName("Invoice.pdf");
-           multipart.addBodyPart(messageBodyPart);
+            messageBodyPart = new MimeBodyPart();
+            DataSource source = new ByteArrayDataSource(invoicePdf, "application/pdf");
+            messageBodyPart.setDataHandler(new DataHandler(source));
+            messageBodyPart.setFileName("Invoice.pdf");
+            multipart.addBodyPart(messageBodyPart);
 
-           message.setContent(multipart);
+            message.setContent(multipart);
 
-           Transport.send(message);
+            Transport.send(message);
 
-    
-        } catch (MessagingException e) {
-           throw new RuntimeException(e);
+        }
+        catch (MessagingException e) {
+            throw new RuntimeException(e);
         }
     }
-    
-    private byte[] createInvoice(Order order)  {
+
+    private byte[] createInvoice(Order order) {
         try {
 
-          Map<String, Object> parameters = new HashMap<>();
-          parameters.put("order", order);
-          JasperReport report = (JasperReport) JRLoader.loadObject(this.getClass().getResourceAsStream("/invoice.jasper"));
-          JasperPrint jasperPrint
-          = JasperFillManager.fillReport(report, parameters,new JREmptyDataSource());
-          byte[] pdfReport=
-          JasperExportManager.exportReportToPdf(jasperPrint);
-          return pdfReport;
-        } catch (Exception e) {
+            Map<String, Object> parameters = new HashMap<>();
+            parameters.put("order", order);
+            JasperReport report = (JasperReport) JRLoader
+                .loadObject(this.getClass().getResourceAsStream("/invoice.jasper"));
+            JasperPrint jasperPrint = JasperFillManager.fillReport(report, parameters, new JREmptyDataSource());
+            byte[] pdfReport = JasperExportManager.exportReportToPdf(jasperPrint);
+            return pdfReport;
+        }
+        catch (Exception e) {
             e.printStackTrace();
         }
         return null;
     }
-
 
 }
