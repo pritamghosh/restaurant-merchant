@@ -44,6 +44,7 @@ import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.export.JRPdfExporter;
 import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.export.SimpleExporterInput;
@@ -208,8 +209,8 @@ public class RestaurantServiceImpl implements RestaurantService {
         try {
 
           Map<String, Object> parameters = new HashMap<>();
-//          JRBeanCollectionDataSource details = new JRBeanCollectionDataSource(getInvoice().getDetails());
-//          parameters.put("details", details);
+//          JRBeanCollectionDataSource details = new JRBeanCollectionDataSource(order.getOrderItems());
+//          parameters.put("orderItems", details);
           parameters.put("order", order);
           
           JasperReport report = (JasperReport) JRLoader.loadObject(this.getClass().getResourceAsStream("/invoice.jasper"));

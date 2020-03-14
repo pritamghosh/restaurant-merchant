@@ -102,7 +102,7 @@
 				</reportElement>
 				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" whenNoDataType="AllSectionsNoDetail">
 					<datasetRun subDataset="Dataset1" uuid="45465db1-250c-4084-b0c2-f812470e5704">
-						<dataSourceExpression><![CDATA[$P{order}.getOrderItems()]]></dataSourceExpression>
+						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{order}.getOrderItems())]]></dataSourceExpression>
 					</datasetRun>
 					<jr:column width="80" uuid="c41819c7-4c40-4e27-8756-e0892e893573">
 						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column1"/>
