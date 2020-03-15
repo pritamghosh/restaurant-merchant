@@ -129,7 +129,7 @@ public class RestaurantServiceImpl implements RestaurantService {
 		paymentDTO.setAmount(order.getTotal());
 		paymentDTO.setEmail(order.getEmail());
 		paymentDTO.setFaceId(order.getFaceId());
-		paymentDTO.setPartner(order.getRestaurantName());
+		paymentDTO.setPartner("RESTAURANT");
 		return paymentDTO;
 	}
 

@@ -30,8 +30,6 @@ public class RestaurantController {
 
     }
     
-
-
 	 @PostMapping("/login")
 	public User login(@RequestBody User user) throws Exception {
     	return service.login(user);
