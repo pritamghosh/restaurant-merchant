@@ -14,7 +14,7 @@ public class Order {
     private String restaurantName;
     private String date;
     private String txnId ;
-    private float total;
+    private int total;
     private String paymentMode;
     
 }

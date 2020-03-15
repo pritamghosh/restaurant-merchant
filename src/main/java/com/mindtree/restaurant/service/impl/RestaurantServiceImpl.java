@@ -29,12 +29,16 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import javax.mail.util.ByteArrayDataSource;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mindtree.restaurant.client.RestaurantPaymentClient;
+import com.mindtree.restaurant.model.ConfirmBooking;
 import com.mindtree.restaurant.model.Order;
+import com.mindtree.restaurant.model.PaymentDTO;
 import com.mindtree.restaurant.model.Restaurant;
 import com.mindtree.restaurant.model.Restaurants;
 import com.mindtree.restaurant.model.User;
@@ -49,6 +53,17 @@ import net.sf.jasperreports.engine.util.JRLoader;
 
 @Service
 public class RestaurantServiceImpl implements RestaurantService {
+	@Autowired
+	private RestaurantPaymentClient paymentClient;
+	
+	public RestaurantPaymentClient getPaymentClient() {
+		return paymentClient;
+	}
+
+	public void setPaymentClient(RestaurantPaymentClient paymentClient) {
+		this.paymentClient = paymentClient;
+	}
+
 
     @Value("${app.smtp.username}")
     private String username;
@@ -94,21 +109,31 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
-    public void placeOrder(Order order) throws Exception {
+    public ConfirmBooking placeOrder(Order order) throws Exception {
         order.setRestaurantName(USER_MAP.get(order.getRestaurantUsername().toLowerCase()).getRestaurantName());
         Date date = new Date();
         SimpleDateFormat sf = new SimpleDateFormat("EEE, d MMM yyyy");
         order.setDate(sf.format(date));
         order.setPaymentMode("Minto Pay");
         order.setTotal(
-            order.getOrderItems().stream().map(it -> it.getQty() * it.getMenuItem().getPrice()).reduce(0F, Float::sum));
-        // call payment
+            order.getOrderItems().stream().map(it -> it.getQty() * it.getMenuItem().getPrice()).reduce(0, Integer::sum));
         order.setTxnId("Transaction Id");
         Thread th = new Thread(() -> sendMail(order));
         th.start();
+        PaymentDTO paymentDTO = constructPaymentDTO(order);
+		return paymentClient.makePayment(paymentDTO);
     }
 
-    @Override
+    private PaymentDTO constructPaymentDTO(Order order) {
+		PaymentDTO paymentDTO = new PaymentDTO();
+		paymentDTO.setAmount(order.getTotal());
+		paymentDTO.setEmail(order.getEmail());
+		paymentDTO.setFaceId(order.getFaceId());
+		paymentDTO.setPartner(order.getRestaurantName());
+		return paymentDTO;
+	}
+
+	@Override
     public User login(User user) throws Exception {
         User userRes = USER_MAP.get(user.getUsername().toLowerCase());
         if (userRes != null && userRes.getPassword().equals(user.getPassword())) {
