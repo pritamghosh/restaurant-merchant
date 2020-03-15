@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.mindtree.restaurant.exception.AuthenticationFailureException;
+import com.mindtree.restaurant.exception.InvalidRequestException;
+import com.mindtree.restaurant.exception.TransferFailureException;
 import com.mindtree.restaurant.model.ConfirmBooking;
 import com.mindtree.restaurant.model.Order;
 import com.mindtree.restaurant.model.User;
@@ -25,7 +28,8 @@ public class RestaurantController {
     
     
     @PostMapping("/order")
-    public ConfirmBooking placeOrder(@RequestBody Order order) throws Exception {
+    public ConfirmBooking placeOrder(@RequestBody Order order) 
+    		throws AuthenticationFailureException {
     	return service.placeOrder(order);
 
     }
@@ -39,10 +43,10 @@ public class RestaurantController {
     
 
 
-	@ExceptionHandler(Exception.class)
+	/*@ExceptionHandler(Exception.class)
     public ResponseEntity<Object> handleError(Exception ex){
 	    ex.printStackTrace();
         return  new ResponseEntity<>( ex, HttpStatus.BAD_REQUEST);
         
-    }
+    }*/
 }

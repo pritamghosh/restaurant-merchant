@@ -28,6 +28,7 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import javax.mail.util.ByteArrayDataSource;
+import javax.security.sasl.AuthenticationException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -36,6 +37,9 @@ import org.springframework.util.StringUtils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mindtree.restaurant.client.RestaurantPaymentClient;
+import com.mindtree.restaurant.exception.AuthenticationFailureException;
+import com.mindtree.restaurant.exception.InvalidRequestException;
+import com.mindtree.restaurant.exception.TransferFailureException;
 import com.mindtree.restaurant.model.ConfirmBooking;
 import com.mindtree.restaurant.model.Order;
 import com.mindtree.restaurant.model.PaymentDTO;
@@ -109,20 +113,20 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
-    public ConfirmBooking placeOrder(Order order) throws Exception {
-        order.setRestaurantName(USER_MAP.get(order.getRestaurantUsername().toLowerCase()).getRestaurantName());
-        Date date = new Date();
-        SimpleDateFormat sf = new SimpleDateFormat("EEE, d MMM yyyy");
-        order.setDate(sf.format(date));
-        order.setPaymentMode("Minto Pay");
-        order.setTotal(
-            order.getOrderItems().stream().map(it -> it.getQty() * it.getMenuItem().getPrice()).reduce(0, Integer::sum));
-        order.setTxnId("Transaction Id");
-        Thread th = new Thread(() -> sendMail(order));
-        th.start();
-        PaymentDTO paymentDTO = constructPaymentDTO(order);
+	public ConfirmBooking placeOrder(Order order) {
+		order.setRestaurantName(USER_MAP.get(order.getRestaurantUsername().toLowerCase()).getRestaurantName());
+		Date date = new Date();
+		SimpleDateFormat sf = new SimpleDateFormat("EEE, d MMM yyyy");
+		order.setDate(sf.format(date));
+		order.setPaymentMode("Minto Pay");
+		order.setTotal(order.getOrderItems().stream().map(it -> it.getQty() * it.getMenuItem().getPrice()).reduce(0,
+				Integer::sum));
+		order.setTxnId("Transaction Id");
+		Thread th = new Thread(() -> sendMail(order));
+		th.start();
+		PaymentDTO paymentDTO = constructPaymentDTO(order);
 		return paymentClient.makePayment(paymentDTO);
-    }
+	}
 
     private PaymentDTO constructPaymentDTO(Order order) {
 		PaymentDTO paymentDTO = new PaymentDTO();
