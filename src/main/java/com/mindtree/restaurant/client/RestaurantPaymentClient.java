@@ -11,7 +11,6 @@ import com.mindtree.restaurant.exception.AuthenticationFailureException;
 import com.mindtree.restaurant.exception.InvalidRequestException;
 import com.mindtree.restaurant.exception.TransferFailureException;
 import com.mindtree.restaurant.model.ConfirmBooking;
-import com.mindtree.restaurant.model.Order;
 import com.mindtree.restaurant.model.PaymentDTO;
 
 /**
@@ -22,5 +21,5 @@ import com.mindtree.restaurant.model.PaymentDTO;
 public interface RestaurantPaymentClient {
 
 	@PostMapping("/api/makePayment")
-	public ConfirmBooking makePayment(@RequestBody PaymentDTO paymentDTO);
+	public ConfirmBooking makePayment(@RequestBody PaymentDTO paymentDTO) throws AuthenticationFailureException, TransferFailureException, InvalidRequestException ;
 }

@@ -3,12 +3,11 @@
  */
 package com.mindtree.restaurant.client;
 
-import javax.security.sasl.AuthenticationException;
-
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import com.mindtree.restaurant.exception.AuthenticationFailureException;
+import com.mindtree.restaurant.exception.InvalidRequestException;
+import com.mindtree.restaurant.exception.TransferFailureException;
 
 import feign.Response;
 import feign.codec.ErrorDecoder;
@@ -23,9 +22,13 @@ public class PaymentErrorDecoder implements ErrorDecoder {
 	@Override
 	public Exception decode(String methodKey, Response response) {
 		if(response.status() == 401) {
-			return new AuthenticationFailureException("Uthorization failed!!!!");
+			return new AuthenticationFailureException("Payment authorization failed!!!");
 		}
-		return null;
+		if(response.status() == 412) {
+			return new TransferFailureException("There is no sufficient wallet balance!!!");
+		}
+		else {
+			return new InvalidRequestException("Something went wrong!!!");
+		}
 	}
-
 }

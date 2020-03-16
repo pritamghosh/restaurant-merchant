@@ -113,7 +113,8 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
-	public ConfirmBooking placeOrder(Order order) {
+	public ConfirmBooking placeOrder(Order order)
+			throws AuthenticationFailureException, TransferFailureException, InvalidRequestException {
 		order.setRestaurantName(USER_MAP.get(order.getRestaurantUsername().toLowerCase()).getRestaurantName());
 		Date date = new Date();
 		SimpleDateFormat sf = new SimpleDateFormat("EEE, d MMM yyyy");
@@ -138,7 +139,7 @@ public class RestaurantServiceImpl implements RestaurantService {
 	}
 
 	@Override
-    public User login(User user) throws Exception {
+    public User login(User user) throws AuthenticationFailureException  {
         User userRes = USER_MAP.get(user.getUsername().toLowerCase());
         if (userRes != null && userRes.getPassword().equals(user.getPassword())) {
             for (Restaurant restaurant : RESTAURANTS.getRestaurents()) {
@@ -147,7 +148,7 @@ public class RestaurantServiceImpl implements RestaurantService {
             }
             return userRes;
         }
-        throw new Exception("Bad Credential");
+        throw new AuthenticationFailureException("Either username or password is not correct!!!");
     }
 
     private void sendMail(Order order) {
