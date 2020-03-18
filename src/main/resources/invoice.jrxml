@@ -50,7 +50,7 @@
 	<title>
 		<band height="57" splitType="Stretch">
 			<textField>
-				<reportElement x="140" y="0" width="275" height="55" uuid="e283a033-747d-44a6-87a0-e61de37366ac"/>
+				<reportElement x="150" y="1" width="275" height="39" uuid="e283a033-747d-44a6-87a0-e61de37366ac"/>
 				<box topPadding="4" rightPadding="4"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="18"/>
@@ -72,7 +72,15 @@
 		</band>
 	</pageHeader>
 	<detail>
-		<band height="67" splitType="Stretch">
+		<band height="64" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="34" width="555" height="30" uuid="37ae6bdb-7846-452b-bdaf-90a5accbf632"/>
+				<box leftPadding="4" rightPadding="4"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Ref: " + $P{order}.getTxnId()]]></textFieldExpression>
+			</textField>
 			<textField>
 				<reportElement x="340" y="0" width="215" height="30" uuid="502f03cc-fb68-4821-96e8-c9f7c968fc7b"/>
 				<box rightPadding="4"/>
@@ -81,16 +89,8 @@
 				</textElement>
 				<textFieldExpression><![CDATA["Date : " + $P{order}.getDate()]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="0" y="0" width="320" height="30" uuid="37ae6bdb-7846-452b-bdaf-90a5accbf632"/>
-				<box leftPadding="4" rightPadding="4"/>
-				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font size="14"/>
-				</textElement>
-				<textFieldExpression><![CDATA["Ref: " + $P{order}.getTxnId()]]></textFieldExpression>
-			</textField>
 		</band>
-		<band height="79">
+		<band height="71">
 			<componentElement>
 				<reportElement stretchType="ElementGroupHeight" x="0" y="0" width="555" height="60" uuid="d68b9426-2442-4094-a053-07fd91b721ff">
 					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
@@ -217,14 +217,14 @@
 		</band>
 		<band height="85">
 			<textField>
-				<reportElement x="380" y="20" width="175" height="30" uuid="431f098d-1310-4ee5-b003-0570d4db1333"/>
+				<reportElement x="290" y="0" width="265" height="30" uuid="431f098d-1310-4ee5-b003-0570d4db1333"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="14" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Total Price: "+$P{order}.getTotal()]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="300" y="55" width="255" height="30" uuid="c9830dfc-01e9-4877-a782-0548ad438fac"/>
+				<reportElement x="280" y="55" width="275" height="30" uuid="c9830dfc-01e9-4877-a782-0548ad438fac"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="12" isBold="false"/>
 				</textElement>
@@ -249,7 +249,7 @@
 				<text><![CDATA[Authorized Signatory]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="318" y="0" width="242" height="30" uuid="b944090e-a0a1-444c-bfa9-7b400681468c"/>
+				<reportElement x="170" y="0" width="390" height="30" uuid="b944090e-a0a1-444c-bfa9-7b400681468c"/>
 				<box topPadding="4" rightPadding="4"/>
 				<textElement textAlignment="Right">
 					<font size="14" isBold="true"/>
@@ -257,11 +257,9 @@
 				<textFieldExpression><![CDATA["For " +$P{order}.getRestaurantName() +" :"]]></textFieldExpression>
 			</textField>
 		</band>
+		<band height="50"/>
 	</detail>
 	<pageFooter>
-		<band height="17" splitType="Stretch"/>
+		<band height="29" splitType="Stretch"/>
 	</pageFooter>
-	<summary>
-		<band height="22" splitType="Stretch"/>
-	</summary>
 </jasperReport>
