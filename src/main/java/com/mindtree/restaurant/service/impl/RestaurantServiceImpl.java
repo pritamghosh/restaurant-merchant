@@ -122,11 +122,16 @@ public class RestaurantServiceImpl implements RestaurantService {
 		order.setPaymentMode("Minto Pay");
 		order.setTotal(order.getOrderItems().stream().map(it -> it.getQty() * it.getMenuItem().getPrice()).reduce(0,
 				Integer::sum));
-		order.setTxnId("Transaction Id");
-		Thread th = new Thread(() -> sendMail(order));
-		th.start();
-		PaymentDTO paymentDTO = constructPaymentDTO(order);
-		return paymentClient.makePayment(paymentDTO);
+		ConfirmBooking confirmBooking = paymentClient.makePayment(constructPaymentDTO(order));
+		if (confirmBooking.getTransactionId() != null) {
+			order.setTxnId("Transaction Id");
+			Thread th = new Thread(() -> sendMail(order));
+			th.start();
+			return confirmBooking;
+		}
+		else {
+			throw new TransferFailureException("Transaction failed");
+		}
 	}
 
     private PaymentDTO constructPaymentDTO(Order order) {
