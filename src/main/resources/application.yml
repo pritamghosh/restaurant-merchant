@@ -8,6 +8,6 @@ app:
         port: 587
         host: smtp.gmail.com
     api:
-        mintopay: http://192.168.1.9:8080
+        mintopay: https://travelswift.azurewebsites.net/minto-app
    
 
