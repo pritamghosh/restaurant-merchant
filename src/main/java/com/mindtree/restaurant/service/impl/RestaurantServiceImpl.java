@@ -1,11 +1,7 @@
 package com.mindtree.restaurant.service.impl;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.text.SimpleDateFormat;
@@ -28,7 +24,6 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import javax.mail.util.ByteArrayDataSource;
-import javax.security.sasl.AuthenticationException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -124,7 +119,7 @@ public class RestaurantServiceImpl implements RestaurantService {
 				Integer::sum));
 		ConfirmBooking confirmBooking = paymentClient.makePayment(constructPaymentDTO(order));
 		if (confirmBooking.getTransactionId() != null) {
-			order.setTxnId("Transaction Id");
+			order.setTxnId(confirmBooking.getTransactionId());
 			Thread th = new Thread(() -> sendMail(order));
 			th.start();
 			return confirmBooking;
