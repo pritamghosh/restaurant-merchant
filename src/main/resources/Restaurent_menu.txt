@@ -137,7 +137,7 @@
                "menuList":[
                   {
                      "price":2.0,
-                     "name":"Gulan jamun with ice cream",
+                     "name":"Gulam jamun with ice cream",
                      "description":"Spicy chiken wings",
                      "veg":true
                   },
